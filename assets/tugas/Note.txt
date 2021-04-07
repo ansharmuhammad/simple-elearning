@@ -1,0 +1,7 @@
+Judul 	: Rancang bangun sistem informasi pemerintahan desa untuk peningkatan pelayanan berbasis web dan android 
+		(Studi kasus : Kantor desa sugih waras kec. Banding Agung)
+Nama 	: Wicky Novia Krisna
+Npm   	: 17311367
+Jurusan : Sistem Informasi
+Prodi	: Sistem Informasi 
+Fakultas: Teknik Dan Ilmu Komputer  Universitas Teknokrat Indonesia

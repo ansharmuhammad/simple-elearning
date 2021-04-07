@@ -1,4 +1,6 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
 /*
 | -------------------------------------------------------------------
 | MIME TYPES
@@ -7,7 +9,7 @@
 | Upload class to help identify allowed file types.
 |
 */
-$mimes = array(
+return array(
 	'hqx'	=>	array('application/mac-binhex40', 'application/mac-binhex', 'application/x-binhex40', 'application/x-mac-binhex40'),
 	'cpt'	=>	'application/mac-compactpro',
 	'csv'	=>	array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain'),
@@ -75,6 +77,14 @@ $mimes = array(
 	'jpeg'	=>	array('image/jpeg', 'image/pjpeg'),
 	'jpg'	=>	array('image/jpeg', 'image/pjpeg'),
 	'jpe'	=>	array('image/jpeg', 'image/pjpeg'),
+	'jp2'	=>	array('image/jp2', 'video/mj2', 'image/jpx', 'image/jpm'),
+	'j2k'	=>	array('image/jp2', 'video/mj2', 'image/jpx', 'image/jpm'),
+	'jpf'	=>	array('image/jp2', 'video/mj2', 'image/jpx', 'image/jpm'),
+	'jpg2'	=>	array('image/jp2', 'video/mj2', 'image/jpx', 'image/jpm'),
+	'jpx'	=>	array('image/jp2', 'video/mj2', 'image/jpx', 'image/jpm'),
+	'jpm'	=>	array('image/jp2', 'video/mj2', 'image/jpx', 'image/jpm'),
+	'mj2'	=>	array('image/jp2', 'video/mj2', 'image/jpx', 'image/jpm'),
+	'mjp2'	=>	array('image/jp2', 'video/mj2', 'image/jpx', 'image/jpm'),
 	'png'	=>	array('image/png',  'image/x-png'),
 	'tiff'	=>	'image/tiff',
 	'tif'	=>	'image/tiff',
@@ -127,9 +137,10 @@ $mimes = array(
 	'3gp'   =>	array('video/3gp', 'video/3gpp'),
 	'mp4'   =>	'video/mp4',
 	'm4a'   =>	'audio/x-m4a',
-	'f4v'   =>	'video/mp4',
+	'f4v'   =>	array('video/mp4', 'video/x-f4v'),
+	'flv'	=>	'video/x-flv',
 	'webm'	=>	'video/webm',
-	'aac'   =>	'audio/x-acc',
+	'aac'   =>	array('audio/x-aac', 'audio/aac'),
 	'm4u'   =>	'application/vnd.mpegurl',
 	'm3u'   =>	'text/plain',
 	'xspf'  =>	'application/xspf+xml',
@@ -138,13 +149,14 @@ $mimes = array(
 	'au'    =>	'audio/x-au',
 	'ac3'   =>	'audio/ac3',
 	'flac'  =>	'audio/x-flac',
-	'ogg'   =>	'audio/ogg',
+	'ogg'   =>	array('audio/ogg', 'video/ogg', 'application/ogg'),
 	'kmz'	=>	array('application/vnd.google-earth.kmz', 'application/zip', 'application/x-zip'),
 	'kml'	=>	array('application/vnd.google-earth.kml+xml', 'application/xml', 'text/xml'),
 	'ics'	=>	'text/calendar',
 	'ical'	=>	'text/calendar',
 	'zsh'	=>	'text/x-scriptzsh',
-	'7zip'	=>	array('application/x-compressed', 'application/x-zip-compressed', 'application/zip', 'multipart/x-zip'),
+	'7z'	=>	array('application/x-7z-compressed', 'application/x-compressed', 'application/x-zip-compressed', 'application/zip', 'multipart/x-zip'),
+	'7zip'	=>	array('application/x-7z-compressed', 'application/x-compressed', 'application/x-zip-compressed', 'application/zip', 'multipart/x-zip'),
 	'cdr'	=>	array('application/cdr', 'application/coreldraw', 'application/x-cdr', 'application/x-coreldraw', 'image/cdr', 'image/x-cdr', 'zz-application/zz-winassoc-cdr'),
 	'wma'	=>	array('audio/x-ms-wma', 'video/x-ms-asf'),
 	'jar'	=>	array('application/java-archive', 'application/x-java-application', 'application/x-jar', 'application/x-compressed'),
@@ -153,8 +165,20 @@ $mimes = array(
 	'srt'	=>	array('text/srt', 'text/plain'),
 	'vtt'	=>	array('text/vtt', 'text/plain'),
 	'ico'	=>	array('image/x-icon', 'image/x-ico', 'image/vnd.microsoft.icon'),
-	'sql' => 'application/octet-stream'
+	'odc'	=>	'application/vnd.oasis.opendocument.chart',
+	'otc'	=>	'application/vnd.oasis.opendocument.chart-template',
+	'odf'	=>	'application/vnd.oasis.opendocument.formula',
+	'otf'	=>	'application/vnd.oasis.opendocument.formula-template',
+	'odg'	=>	'application/vnd.oasis.opendocument.graphics',
+	'otg'	=>	'application/vnd.oasis.opendocument.graphics-template',
+	'odi'	=>	'application/vnd.oasis.opendocument.image',
+	'oti'	=>	'application/vnd.oasis.opendocument.image-template',
+	'odp'	=>	'application/vnd.oasis.opendocument.presentation',
+	'otp'	=>	'application/vnd.oasis.opendocument.presentation-template',
+	'ods'	=>	'application/vnd.oasis.opendocument.spreadsheet',
+	'ots'	=>	'application/vnd.oasis.opendocument.spreadsheet-template',
+	'odt'	=>	'application/vnd.oasis.opendocument.text',
+	'odm'	=>	'application/vnd.oasis.opendocument.text-master',
+	'ott'	=>	'application/vnd.oasis.opendocument.text-template',
+	'oth'	=>	'application/vnd.oasis.opendocument.text-web'
 );
-
-/* End of file mimes.php */
-/* Location: ./application/config/mimes.php */
