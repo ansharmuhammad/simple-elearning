@@ -5,9 +5,9 @@ php and code igniter 3 based e-learning
 php 7
 
 ## installasi
--masukkan semua file ke dalam folder xampp/htdocs jika menggunakan xampp
--masuk ke dalam phpmyadmin. buat database baru dengan nama db_learning
--lakukan import sql dari file db_learning.sql
+- masukkan semua file ke dalam folder xampp/htdocs jika menggunakan xampp
+- masuk ke dalam phpmyadmin. buat database baru dengan nama db_learning
+- lakukan import sql dari file db_learning.sql
 
 ## akun
 | role | username | password |
