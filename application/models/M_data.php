@@ -55,7 +55,18 @@ class M_data extends CI_Model {
 		$this->db->select('*');
 		$this->db->from('relasi_kelassiswa');
 		$this->db->join('siswa','relasi_kelassiswa.kelassiswa_siswa = siswa.siswa_nis');
+		$this->db->join('kelas','relasi_kelassiswa.kelassiswa_kelas = kelas.kelas_kode');
 		$this->db->where('kelassiswa_kelas',$kode);
+		$this->db->where('kelassiswa_tahunajaran',$ta);
+		$this->db->order_by('siswa_nis','asc');
+		return $this->db->get();
+	}
+	function siswakelasall($ta)
+	{
+		$this->db->select('*');
+		$this->db->from('relasi_kelassiswa');
+		$this->db->join('siswa','relasi_kelassiswa.kelassiswa_siswa = siswa.siswa_nis');
+		$this->db->join('kelas','relasi_kelassiswa.kelassiswa_kelas = kelas.kelas_kode');
 		$this->db->where('kelassiswa_tahunajaran',$ta);
 		$this->db->order_by('siswa_nis','asc');
 		return $this->db->get();
@@ -209,6 +220,15 @@ class M_data extends CI_Model {
 		$this->db->join('mapel','relasi_mapelguru.mapelguru_mapel = mapel.mapel_kode');
 		$this->db->join('guru','relasi_mapelguru.mapelguru_guru = guru.guru_nip');
 		$this->db->where('tugas_id',$id);
+		return $this->db->get();
+	}
+	function absensi($id)
+	{
+		$this->db->select('*');
+		$this->db->from('absensi');
+		$this->db->join('materi','absensi.absensi_materi = materi.materi_id');
+		$this->db->where('absensi_mapelguru',$id);
+		$this->db->order_by('absensi.absensi_waktu','desc');
 		return $this->db->get();
 	}
 

@@ -22,7 +22,8 @@
                         <td><?=$i++?></td>
                         <td><?=$d->materi_judul?></td>
                         <td><?=date('H:i A, d F Y',strtotime($d->materi_waktu))?></td>
-                        <td><?php if ($d->materi_file != '') {?><a download href="<?=base_url('assets/materi/'.$d->materi_file)?>" class="btn btn-secondary btn-sm">Download file</a><?php }else{ echo "-"; } ?></td>
+                        <td><?php if ($d->materi_file != '') { ?> File : <a download="" href="<?=base_url('assets/materi/'.$d->materi_file)?>">Download</a> <?php }else{ echo "<small>File : Tidak ada file yang dilampirkan</small>"; } ?><br>
+                        <?php if ($d->materi_video != '') { ?> Video : <a download="" href="<?=base_url('assets/materi/'.$d->materi_video)?>">Download</a> <?php }else{ echo "<small>Video : Tidak ada file yang dilampirkan</small>"; } ?></td>
                         <td><a href="<?=base_url('siswa/materi_detail/'.$d->materi_id)?>" class="btn btn-info btn-sm"><span class="fa fa-book-open"></span> Baca</a></td>
                       </tr>
                       <?php } ?>

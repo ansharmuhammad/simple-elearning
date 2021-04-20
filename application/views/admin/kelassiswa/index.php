@@ -6,6 +6,7 @@
               <div class="card-header">
                 <h3 class="card-title"><?=$title?></h3>
                 <a href="<?=base_url('admin/addkelas')?>" class="btn btn-primary btn-sm float-right">Tambah Data</a>
+                <a download="" href="<?=base_url('admin/downloadsiswakelas/')?>" class="btn btn-info btn-sm float-right" style="margin-right: 5px">Export Data Excel</a>
               </div>
               <div class="card-body">
                 <div class="table-responsive">
@@ -27,6 +28,7 @@
                         <td><?=$d->jurusan_nama?></td>
                         <td><?=$cek?> Siswa</td>
                         <td>
+                          <a download="" href="<?=base_url('admin/downloadkelas/'.$d->kelas_kode)?>" class="btn btn-warning btn-sm" style="color: white">Download Excel</a>
                           <a href="<?=base_url('admin/detailkelas/'.$d->kelas_kode)?>" class="btn btn-info btn-sm">Detail</a>
                         </td>
                       </tr>

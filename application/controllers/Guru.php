@@ -60,6 +60,12 @@ class Guru extends CI_Controller {
 	    		$file = $this->upload->data();
 	    		$data['materi_file'] = $file['file_name'];
 	    	}
+	    	if ($this->upload->do_upload('video')){
+	    		$video = $this->upload->data();
+	    		$data['materi_video'] = $video['file_name'];
+	    	}
+
+
 	    	$this->db->insert('materi',$data);
 	    	$this->session->set_flashdata('message', 'swal("Berhasil!", "Tambah materi", "success");');
 	    	redirect('guru/materi/'.$id);
@@ -95,6 +101,10 @@ class Guru extends CI_Controller {
 	    	if ($this->upload->do_upload('file')){
 	    		$file = $this->upload->data();
 	    		$data['materi_file'] = $file['file_name'];
+	    	}
+	    	if ($this->upload->do_upload('video')){
+	    		$video = $this->upload->data();
+	    		$data['materi_video'] = $video['file_name'];
 	    	}
 	    	$this->db->update('materi',$data,['materi_id'=>$id]);
 	    	$this->session->set_flashdata('message', 'swal("Berhasil!", "Update materi", "success");');
@@ -306,6 +316,111 @@ class Guru extends CI_Controller {
 	    $this->db->insert('komentar',$data);
 	    $this->session->set_flashdata('message', 'swal("Berhasil!", "Menambahkan password", "success");');
 	    redirect($this->agent->referrer());
+	}
+	public function absensi($id)
+	{
+	    $data['c']			= $this->web;
+		$data['ta']			= $this->ta;
+		$data['data']		= $this->M_data->get_mapeldetail($id)->row();
+		$data['list']		= $this->M_data->absensi($id)->result();
+		$data['title']		= 'Absensi '.$data['data']->mapel_nama.' kelas '.$data['data']->kelas_nama;
+		$data['sidebar']	= 'sidebar_guru';
+		$data['body']		= 'guru/absensi/index';
+		$this->load->view('template', $data);
+	
+	}
+	public function addabsensi($id)
+	{
+	    if ($this->input->post()) {
+	    	$p 		= $this->input->post();
+	    	$this->db->trans_start();
+	    	$data 	= [
+	    		'absensi_waktu'		=> date('Y-m-d H:i:s'),
+	    		'absensi_mapelguru'	=> $id,
+	    		'absensi_materi'	=> $p['materi']
+	    	];
+	    	$this->db->insert('absensi',$data);
+	    	$cek 	=$this->db->query(" select max(absensi_id) as max from absensi ")->row();
+	    	$detail = $this->M_data->get_mapeldetail($id)->row();
+	    	$siswa 	= $this->M_data->kelassiswa($detail->kelas_kode,$this->ta->tahunajaran_kode)->result();
+	    	$absens = [];
+	    	foreach ($siswa as $s) {
+	    	    $abs = [
+	    	    	'detail_absensi'	=> $cek->max,
+	    	    	'detail_nis'		=> $s->siswa_nis,
+	    	    	'detail_kehadiran'	=> $p['kehadiran'.$s->siswa_nis]
+	    	    ];
+
+	    	    array_push($absens,$abs);
+	    	}
+	    	$this->db->insert_batch('detail_absensi', $absens); 
+	    	$this->db->trans_complete();
+	    	$this->session->set_flashdata('message', 'swal("Berhasil!", "Tambah absensi", "success");');
+	    	redirect('guru/absensi/'.$id);
+	    }
+	    else
+	    {
+	    	$data['kode']		= $id;
+	    	$data['c']			= $this->web;
+			$data['ta']			= $this->ta;
+			$data['data']		= $this->M_data->get_mapeldetail($id)->row();
+			$data['list']		= $this->M_data->kelassiswa($data['data']->kelas_kode,$this->ta->tahunajaran_kode)->result();
+			$data['materi']		= $this->db->get_where('materi',['materi_mapelguru'=>$id])->result();
+			$data['title']		= 'Tambah Absensi';
+			$data['sidebar']	= 'sidebar_guru';
+			$data['body']		= 'guru/absensi/add';
+			$this->load->view('template', $data);
+	    }
+	}
+	public function editabsensi($id)
+	{
+	    if ($this->input->post()) {
+	    	$p 		= $this->input->post();
+	    	$cek 	= $this->db->get_where('absensi',['absensi_id'=>$id])->row();
+	    	$this->db->trans_start();
+	    	$data 	= [
+	    		'absensi_materi'	=> $p['materi']
+	    	];
+	    	$this->db->update('absensi',$data,['absensi_id'=>$id]);
+	    	
+
+	    	$detail = $this->M_data->get_mapeldetail($cek->absensi_mapelguru)->row();
+	    	$siswa 	= $this->M_data->kelassiswa($detail->kelas_kode,$this->ta->tahunajaran_kode)->num_rows();
+	    	
+	    	for ($i=0; $i < $siswa ; $i++) { 
+	    		$abs = [
+	    	    	'detail_absensi'	=> $id,
+	    	    	'detail_kehadiran'	=> $p['kehadiran'.$i]
+	    	    ];
+	    	    $this->db->update('detail_absensi', $abs,['detail_id'=>$p['id'.$i]]); 
+	    	}
+	    	
+	    	$this->db->trans_complete();
+	    	$this->session->set_flashdata('message', 'swal("Berhasil!", "Update absensi", "success");');
+	    	redirect('guru/absensi/'.$cek->absensi_mapelguru);
+	    }
+	    else
+	    {
+	    	$data['c']			= $this->web;
+			$data['ta']			= $this->ta;
+			$data['dataabsen']	= $this->db->get_where('absensi',['absensi_id'=>$id])->row();
+			$data['data']		= $this->M_data->get_mapeldetail($data['dataabsen']->absensi_mapelguru)->row();
+			$data['list']		= $this->M_data->kelassiswa($data['data']->kelas_kode,$this->ta->tahunajaran_kode)->result();
+			$data['materi']		= $this->db->get_where('materi',['materi_mapelguru'=>$data['dataabsen']->absensi_mapelguru])->result();
+			$data['title']		= 'Edit Absensi';
+			$data['sidebar']	= 'sidebar_guru';
+			$data['body']		= 'guru/absensi/edit';
+			$this->load->view('template', $data);
+	    }
+	}
+	public function deletetabsensi($id)
+	{
+		$this->db->trans_start();
+	    $this->db->delete('absensi',['absensi_id'=>$id]);
+	    $this->db->delete('detail_absensi',['detail_absensi'=>$id]);
+	    $this->db->trans_complete();
+    	$this->session->set_flashdata('message', 'swal("Berhasil!", "Delete absensi", "success");');
+    	redirect($this->agent->referrer());
 	}
 }
 

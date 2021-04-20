@@ -7,9 +7,13 @@
             <h3 class="card-title">Materi <?=$detail->materi_judul?></h3>
             <a href="<?=base_url('siswa/materi/'.$data->materi_mapelguru)?>" class="btn btn-danger btn-sm float-right">Kembali</a>
           </div>
-          <div class="card-body text-justify">
-            <?=$detail->materi_isi?>
-          </div>
+          <div class="card-body" style="text-align: justify;">
+              <?=$detail->materi_isi?>
+              <?php if ($detail->materi_video != '' or $detail->materi_video != null) { ?>
+                Video Materi : <br>
+                <video src="<?=base_url('assets/materi/'.$detail->materi_video)?>" controls="" style="width: 100%"></video>
+              <?php } ?>
+            </div>
           <div class="card-footer">
             <small>Diposting pada <b><?=date('H:i A, d F Y',strtotime($detail->materi_waktu))?></b> oleh <b><?=$detail->guru_nama?></b> | <?php if ($detail->materi_file != '') {?> <a href="<?=base_url('assets/materi/'.$detail->materi_file)?>">Download file materi</a><?php } else { echo "Materi tidak memiliki file untuk didownload"; } ?> </small>
           </div>

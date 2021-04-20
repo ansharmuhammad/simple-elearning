@@ -20,10 +20,12 @@
             <div class="card-header">
               <h3 class="card-title">Materi</h3>
             </div>
-            <div class="card-body">
-              <div class="table-responsive" style="text-align: justify;">
+            <div class="card-body" style="text-align: justify;">
               <?=$materi->materi_isi?>
-              </div>
+              <?php if ($materi->materi_video != '' or $materi->materi_video != null) { ?>
+                Video Materi : <br>
+                <video src="<?=base_url('assets/materi/'.$materi->materi_video)?>" controls="" style="width: 100%"></video>
+              <?php } ?>
             </div>
             <div class="card-footer">
               Download materi : <?php if ($materi->materi_file != '') { ?> <a download="" href="<?=base_url('assets/materi/'.$materi->materi_file)?>">Download</a> <?php }else{ echo "<small>Tidak ada file yang dilampirkan</small>"; } ?>

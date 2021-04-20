@@ -6,6 +6,8 @@
               <div class="card-header">
                 <h3 class="card-title"><?=$title?></h3>
                 <a href="<?=base_url('admin/addsiswa')?>" class="btn btn-primary btn-sm float-right">Tambah Data</a>
+                <a download="" href="<?=base_url('admin/downloaddatasiswa/')?>" class="btn btn-info btn-sm float-right" style="margin-right: 5px">Download data siswa</a>
+                <a  href="<?=base_url('admin/importsiswa/')?>" class="btn btn-warning btn-sm float-right" style="margin-right: 5px; color: white">Import data siswa</a>
               </div>
               <div class="card-body">
                 <div class="table-responsive">

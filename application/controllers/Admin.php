@@ -1,6 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+//load Spout Library
+require_once APPPATH . 'third_party/Spout/Autoloader/autoload.php';
+ 
+use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
+
 class Admin extends CI_Controller {
 
 	public function __construct()
@@ -114,7 +119,7 @@ class Admin extends CI_Controller {
 			{
 				$data 	= [
 					'siswa_nis' 		=> $p['siswa_nis'],
-					'siswa_nama' 		=> $p['siswa_nama'],
+					'siswa_nama' 		=> ucfirst($p['siswa_nama']),
 					'siswa_jk' 			=> $p['siswa_jk'],
 					'siswa_tanggallahir' => $p['siswa_tanggallahir'],
 					'siswa_tempatlahir' => $p['siswa_tempatlahir'],
@@ -139,7 +144,7 @@ class Admin extends CI_Controller {
 		if ($this->input->post()) {
 			$p 	  	= $this->input->post();
 			$data 	= [
-				'siswa_nama' 		=> $p['siswa_nama'],
+				'siswa_nama' 		=> ucfirst($p['siswa_nama']),
 				'siswa_jk' 			=> $p['siswa_jk'],
 				'siswa_tanggallahir' => $p['siswa_tanggallahir'],
 				'siswa_tempatlahir' => $p['siswa_tempatlahir'],
@@ -163,6 +168,85 @@ class Admin extends CI_Controller {
 		$this->db->delete('siswa',['siswa_nis'=>$kode]);
 		$this->session->set_flashdata('message', 'swal("Berhasil!", "Delete data siswa", "success");');
     	redirect('admin/siswa');
+	}
+	public function downloaddatasiswa()
+	{
+	    $data['c']			= $this->web;
+		$data['data']		= $this->M_data->siswa()->result();
+		$this->load->view('admin/siswa/download', $data);
+	}
+	public function importsiswa($aksi = null)
+	{
+		if ($aksi) {
+			$config['upload_path']      = './assets/temp/'; //siapkan path untuk upload file
+            $config['allowed_types']    = 'xlsx|xls'; //siapkan format file
+            $config['file_name']        = 'doc' . time(); //rename file yang diupload
+ 
+            $this->load->library('upload', $config);
+ 
+            if ($this->upload->do_upload('file')) {
+                //fetch data upload
+                $file   = $this->upload->data();
+ 
+                $reader = ReaderEntityFactory::createXLSXReader(); //buat xlsx reader
+                $reader->open('assets/temp/' . $file['file_name']); //open file xlsx yang baru saja diunggah
+ 
+                //looping pembacaat sheet dalam file        
+                foreach ($reader->getSheetIterator() as $sheet) {
+                    $numRow = 1;
+ 
+                    //siapkan variabel array kosong untuk menampung variabel array data
+                    $save   = array();
+ 
+                    //looping pembacaan row dalam sheet
+                    $no=1;
+                    foreach ($sheet->getRowIterator() as $row) {
+ 
+                        if ($numRow > 1) {
+                            //ambil cell
+                            $cells = $row->getCells();
+ 
+                            $data = array(
+                                'siswa_nis'             => $cells[0],
+                                'siswa_nama'     		=> ucfirst($cells[1]),
+                                'siswa_jk'            	=> $cells[2],
+                                'siswa_tanggallahir'    => date('Y-m-d',strtotime($cells[3])),
+                                'siswa_tempatlahir'     => $cells[4]
+                            );
+ 
+                            //tambahkan array $data ke $save
+                            if ($data['siswa_nis'] != '') {
+                            	$this->db->insert('siswa',$data);
+                            	$no++;
+                            }
+                        }
+ 
+                        $numRow++;
+                    }
+                    //simpan data ke database
+                    //$this->app->simpan($save);
+ 
+                    //tutup spout reader
+                    $reader->close();
+ 
+                    //hapus file yang sudah diupload
+                    unlink('assets/temp/' . $file['file_name']);
+                    //var_dump($save);
+                    $this->session->set_flashdata('message', 'swal("Berhasil!", "Import Data siswa ", "success");');
+					redirect('admin/siswa');
+                }
+            } else {
+                echo "Error :" . $this->upload->display_errors(); //tampilkan pesan error jika file gagal diupload
+            }
+		}
+		else
+		{
+			$data['c']			= $this->web;
+			$data['title']		= 'Import Data Siswa';
+			$data['sidebar']	= 'sidebar_admin';
+			$data['body']		= 'admin/siswa/import';
+			$this->load->view('template', $data);
+		}
 	}
 	//END CURD MASTER SISWA
 	//MENGAKTIFKAN / MENAMBAHKAN USER LOGIN SISWA
@@ -410,6 +494,19 @@ class Admin extends CI_Controller {
 	    }
 	    $this->session->set_flashdata('message', 'swal("Berhasil!", "Menambahkan siswa kedalam kelas", "success");');
     	redirect('admin/detailkelas/'.$kode);
+	}
+	public function downloadsiswakelas()
+	{
+		$data['c']			= $this->web;
+		$data['data']		= $this->M_data->siswakelasall($this->ta->tahunajaran_kode)->result();
+		$this->load->view('admin/kelassiswa/downloadsiswakelas', $data);
+	}
+	public function downloadkelas($kode)
+	{
+		$data['c']			= $this->web;
+		$data['kelas']		= $this->db->get_where('kelas',['kelas_kode'=>$kode])->row();
+		$data['data']		= $this->M_data->kelassiswa($kode,$this->ta->tahunajaran_kode)->result();
+		$this->load->view('admin/kelassiswa/downloadkelas', $data);
 	}
 	public function deletedetailkelas($kode,$key)
 	{

@@ -20,6 +20,7 @@
                 <ul class="list-group">
                     <li class="list-group-item"><a href="<?=base_url('guru/materi/'.$d->mapelguru_id)?>"><i class="fa fa-chevron-right"></i> Materi </a>
                     <li class="list-group-item"><a href="<?=base_url('guru/tugas/'.$d->mapelguru_id)?>"><i class="fa fa-chevron-right"></i> Tugas </a></li>
+                    <li class="list-group-item"><a href="<?=base_url('guru/absensi/'.$d->mapelguru_id)?>"><i class="fa fa-chevron-right"></i> Absensi </a></li>
                 </ul>
               </div>
             </div>

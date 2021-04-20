@@ -27,6 +27,10 @@
                   <label>Materi</label>
                   <textarea class="ckeditor" id="ckeditor" name="isi" required=""></textarea>
                 </div>
+                <div class="form-group">
+                  <label>Video Materi (Optional)</label>
+                  <input type="file" name="video" class="form-control">
+                </div>
               </div>
             </div>
           </div>

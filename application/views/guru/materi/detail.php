@@ -39,7 +39,7 @@
                   <thead class="thead-light">
                     <th width="1%">No</th>
                     <th>Judul</th>
-                    <th>file</th>
+                    <th>Download</th>
                     <th>Waktu</th>
                     <th>Opsi</th>
                   </thead>
@@ -47,8 +47,11 @@
                     <?php $i=1; foreach ($list as $d) { ?>
                     <tr>
                       <td><?=$i++?></td>
-                      <td><?=$d->materi_judul?></td>
-                      <td><?php if ($d->materi_file != '') { ?> <a download="" href="<?=base_url('assets/materi/'.$d->materi_file)?>">Download</a> <?php }else{ echo "<small>Tidak ada file yang dilampirkan</small>"; } ?></td> 
+                      <td><?=ucfirst($d->materi_judul)?></td>
+                      <td>
+                        <?php if ($d->materi_file != '') { ?> File : <a download="" href="<?=base_url('assets/materi/'.$d->materi_file)?>">Download</a> <?php }else{ echo "<small>File : Tidak ada file yang dilampirkan</small>"; } ?><br>
+                        <?php if ($d->materi_video != '') { ?> Video : <a download="" href="<?=base_url('assets/materi/'.$d->materi_video)?>">Download</a> <?php }else{ echo "<small>Video : Tidak ada file yang dilampirkan</small>"; } ?>
+                      </td> 
                       <td><?=$d->materi_waktu?></td>
                       <td>
                         <a href="<?=base_url('guru/detailmateri/'.$d->materi_id.'/'.$data->mapelguru_id)?>" class="btn btn-success btn-sm"><span class="fa fa-eye"></span></a>
