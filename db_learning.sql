@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 07, 2021 at 05:28 AM
--- Server version: 10.4.17-MariaDB
--- PHP Version: 7.4.15
+-- Generation Time: Apr 18, 2021 at 10:40 AM
+-- Server version: 10.4.13-MariaDB
+-- PHP Version: 7.3.20
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,19 @@ SET time_zone = "+00:00";
 --
 -- Database: `db_learning`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `absensi`
+--
+
+CREATE TABLE `absensi` (
+  `absensi_id` int(11) NOT NULL,
+  `absensi_waktu` datetime NOT NULL,
+  `absensi_mapelguru` int(11) NOT NULL,
+  `absensi_materi` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -46,6 +59,19 @@ CREATE TABLE `config` (
 
 INSERT INTO `config` (`config_id`, `config_logo`, `config_sekolah`, `config_alamat`, `config_kota`, `config_phone`, `config_email`, `config_kepsek`, `config_nipkepsek`, `config_author`) VALUES
 (1, 'logo1.png', 'sman 3 kuala kapuas', 'Jl. Pemuda Km. 5,5, Selat Utara, Selat, Kapuas, Kalimantan Tengah', 'Kalimantan Tengah', '082382000703', 'sman3kapus@gmail.com', 'Dwi Haryanto', '12345678909', 'Yoshua Apridiopatra Eka Asi');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `detail_absensi`
+--
+
+CREATE TABLE `detail_absensi` (
+  `detail_id` int(11) NOT NULL,
+  `detail_absensi` int(11) NOT NULL,
+  `detail_nis` varchar(50) NOT NULL,
+  `detail_kehadiran` enum('H','I','S','A') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -203,6 +229,7 @@ CREATE TABLE `materi` (
   `materi_judul` varchar(254) NOT NULL,
   `materi_isi` longtext NOT NULL,
   `materi_file` varchar(254) DEFAULT NULL,
+  `materi_video` varchar(254) NOT NULL,
   `materi_waktu` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -210,12 +237,13 @@ CREATE TABLE `materi` (
 -- Dumping data for table `materi`
 --
 
-INSERT INTO `materi` (`materi_id`, `materi_mapelguru`, `materi_judul`, `materi_isi`, `materi_file`, `materi_waktu`) VALUES
-(2, 9, 'Materi testing dengan file 1', '<p>ini testing materi dengan file</p>\r\n', 'Note.txt', '2021-04-01 09:50:04'),
-(3, 9, 'Materi testing dengan file 2', '<p>ini testing materi dengan file</p>\r\n', 'apbn_DANA_DESA-_ALOKASI_DAN_POTENSI_INEFEKTIVITASNYA20150129095337.pdf', '2021-04-01 09:50:09'),
-(4, 9, 'Materi testing', '<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>\r\n\r\n<h2>Why do we use it?</h2>\r\n\r\n<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using &#39;Content here, content here&#39;, making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for &#39;lorem ipsum&#39; will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>\r\n', NULL, '2021-04-01 10:04:15'),
-(5, 7, 'Testing', '<h2>What is Lorem Ipsum?</h2>\r\n\r\n<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</p>\r\n', NULL, '2021-04-06 13:20:42'),
-(6, 2, 'wer2344r43', '<p>2rf23r23r23</p>\r\n', NULL, '2021-04-06 16:31:36');
+INSERT INTO `materi` (`materi_id`, `materi_mapelguru`, `materi_judul`, `materi_isi`, `materi_file`, `materi_video`, `materi_waktu`) VALUES
+(2, 9, 'Materi testing dengan file 1', '<p>ini testing materi dengan file</p>\r\n', 'Note.txt', '', '2021-04-01 09:50:04'),
+(3, 9, 'Materi testing dengan file 2', '<p>ini testing materi dengan file</p>\r\n', 'apbn_DANA_DESA-_ALOKASI_DAN_POTENSI_INEFEKTIVITASNYA20150129095337.pdf', '', '2021-04-01 09:50:09'),
+(4, 9, 'Materi testing', '<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>\r\n\r\n<h2>Why do we use it?</h2>\r\n\r\n<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using &#39;Content here, content here&#39;, making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for &#39;lorem ipsum&#39; will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>\r\n', NULL, '', '2021-04-01 10:04:15'),
+(5, 7, 'Testing', '<h2>What is Lorem Ipsum?</h2>\r\n\r\n<p><strong>Lorem Ipsum</strong>&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&#39;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</p>\r\n', NULL, '', '2021-04-06 13:20:42'),
+(6, 2, 'wer2344r43', '<p>2rf23r23r23</p>\r\n', NULL, '', '2021-04-06 16:31:36'),
+(7, 1, 'testing materi denga video', '<p>wfwfwef</p>\r\n', '2.PNG', 'vidio_Presentation1.mp4', '2021-04-18 12:39:06');
 
 -- --------------------------------------------------------
 
@@ -387,10 +415,26 @@ INSERT INTO `user` (`user_id`, `user_username`, `user_password`, `user_role`) VA
 --
 
 --
+-- Indexes for table `absensi`
+--
+ALTER TABLE `absensi`
+  ADD PRIMARY KEY (`absensi_id`),
+  ADD KEY `absensi_materi` (`absensi_materi`),
+  ADD KEY `absensi_mapelguru` (`absensi_mapelguru`);
+
+--
 -- Indexes for table `config`
 --
 ALTER TABLE `config`
   ADD PRIMARY KEY (`config_id`);
+
+--
+-- Indexes for table `detail_absensi`
+--
+ALTER TABLE `detail_absensi`
+  ADD PRIMARY KEY (`detail_id`),
+  ADD KEY `detail_absensi` (`detail_absensi`),
+  ADD KEY `detail_nis` (`detail_nis`);
 
 --
 -- Indexes for table `guru`
@@ -494,10 +538,22 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT for table `absensi`
+--
+ALTER TABLE `absensi`
+  MODIFY `absensi_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `config`
 --
 ALTER TABLE `config`
   MODIFY `config_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `detail_absensi`
+--
+ALTER TABLE `detail_absensi`
+  MODIFY `detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `komentar`
@@ -515,7 +571,7 @@ ALTER TABLE `kumpul`
 -- AUTO_INCREMENT for table `materi`
 --
 ALTER TABLE `materi`
-  MODIFY `materi_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `materi_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `pengumuman`
@@ -550,6 +606,19 @@ ALTER TABLE `user`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `absensi`
+--
+ALTER TABLE `absensi`
+  ADD CONSTRAINT `absensi_ibfk_1` FOREIGN KEY (`absensi_mapelguru`) REFERENCES `relasi_mapelguru` (`mapelguru_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `absensi_ibfk_2` FOREIGN KEY (`absensi_materi`) REFERENCES `materi` (`materi_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `detail_absensi`
+--
+ALTER TABLE `detail_absensi`
+  ADD CONSTRAINT `detail_absensi_ibfk_1` FOREIGN KEY (`detail_nis`) REFERENCES `siswa` (`siswa_nis`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `kelas`
