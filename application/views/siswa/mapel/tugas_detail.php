@@ -74,25 +74,40 @@
             <div class="direct-chat-messages">
 
               <?php foreach ($komentar as $k) { 
+                $peran = "murid";
                 if ($k->komentar_user != '') {
                   $cek    = $this->db->get_where('siswa',['siswa_nis'=>$k->komentar_user])->row();
                   $user   = $cek->siswa_nama.' [Siswa]';
+                  $peran = "murid";
                 }
                 else
                 {
                   $user   = $detail->guru_nama.' [Guru]';
+                  $peran = "guru";
                 }
-              ?>
-              <div class="direct-chat-msg">
-                <div class="direct-chat-infos clearfix">
-                  <span class="direct-chat-name float-left"><?=$user?></span>
-                  <span class="direct-chat-timestamp float-right"><?=date('d F Y, H:i A',strtotime($k->komentar_waktu))?></span>
-                </div>
-                <img class="direct-chat-img" src="<?=base_url('assets/')?>img/<?=$c->config_logo?>">
-                <div class="direct-chat-text">
-                  <?=ucfirst($k->komentar_isi)?>
-                </div>
-              </div>
+                if ($peran == "murid") { ?>
+                  <div class="direct-chat-msg right">
+                    <div class="direct-chat-infos clearfix">
+                      <span class="direct-chat-name float-left"><?=$user?></span>
+                      <span class="direct-chat-timestamp float-right"><?=date('d F Y, H:i A',strtotime($k->komentar_waktu))?></span>
+                    </div>
+                    <img class="direct-chat-img" src="<?=base_url('assets/')?>img/<?=$c->config_logo?>">
+                    <div class="direct-chat-text">
+                      <?=ucfirst($k->komentar_isi)?>
+                    </div>
+                  </div>
+                <?php } else {?>
+                  <div class="direct-chat-msg">
+                    <div class="direct-chat-infos clearfix">
+                      <span class="direct-chat-name float-left"><?=$user?></span>
+                      <span class="direct-chat-timestamp float-right"><?=date('d F Y, H:i A',strtotime($k->komentar_waktu))?></span>
+                    </div>
+                    <img class="direct-chat-img" src="<?=base_url('assets/')?>img/<?=$c->config_logo?>">
+                    <div class="direct-chat-text">
+                      <?=ucfirst($k->komentar_isi)?>
+                    </div>
+                  </div>
+                <?php } ?>
               <?php } ?>
             </div>
           </div>
